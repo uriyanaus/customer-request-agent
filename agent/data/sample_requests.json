@@ -1,0 +1,12 @@
+[
+  {"id": "REQ01", "text": "Hi, this is Alice (CUST001). I'd like a refund for order ORD1001, it arrived damaged. It was $30."},
+  {"id": "REQ02", "text": "I want a refund of $600 for order ORD1002, customer CUST002."},
+  {"id": "REQ03", "text": "Customer CUST003 here, requesting a refund on ORD1003 ($120) placed back in February."},
+  {"id": "REQ04", "text": "Refund please for ORD1004, this is CUST001. I was charged $75."},
+  {"id": "REQ05", "text": "Hello, I'm CUST999 and I want my money back for order ORD5555 ($20)."},
+  {"id": "REQ06", "text": "I'm really unhappy and I want a refund."},
+  {"id": "REQ07", "text": "This is CUST002 (Bob). Please refund $45 for ORD1005 from April."},
+  {"id": "REQ08", "text": "Account question: can CUST005 change the email on file?"},
+  {"id": "REQ09", "text": "CUST004 wants a $50 refund on ORD1007."},
+  {"id": "REQ10", "text": "Refund $950 for ORD1008, CUST003 - the order was cancelled."}
+]

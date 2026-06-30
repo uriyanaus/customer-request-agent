@@ -1,0 +1,7 @@
+[
+  {"id": "CUST001", "name": "Alice Cohen",   "email": "alice@example.com", "tier": "premium",  "status": "active"},
+  {"id": "CUST002", "name": "Bob Levi",      "email": "bob@example.com",   "tier": "standard", "status": "active"},
+  {"id": "CUST003", "name": "Carol Mizrahi", "email": "carol@example.com", "tier": "vip",      "status": "active"},
+  {"id": "CUST004", "name": "Dan Peretz",    "email": "dan@example.com",   "tier": "standard", "status": "suspended"},
+  {"id": "CUST005", "name": "Eve Azoulay",   "email": "eve@example.com",   "tier": "premium",  "status": "active"}
+]

@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.env
+
+# Build / packaging
+build/
+dist/
+*.zip
+lambda_build/
+
+# Terraform
+infra/.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+crash.log
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Logs / local outputs
+*.log

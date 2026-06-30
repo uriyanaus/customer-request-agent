@@ -1,0 +1,10 @@
+[
+  {"id": "ORD1001", "customer_id": "CUST001", "amount": 30.00,  "date": "2026-06-01", "status": "completed"},
+  {"id": "ORD1002", "customer_id": "CUST002", "amount": 600.00, "date": "2026-06-05", "status": "completed"},
+  {"id": "ORD1003", "customer_id": "CUST003", "amount": 120.00, "date": "2026-02-01", "status": "completed"},
+  {"id": "ORD1004", "customer_id": "CUST001", "amount": 75.00,  "date": "2026-06-02", "status": "completed"},
+  {"id": "ORD1005", "customer_id": "CUST002", "amount": 45.00,  "date": "2026-04-20", "status": "completed"},
+  {"id": "ORD1006", "customer_id": "CUST005", "amount": 200.00, "date": "2026-06-10", "status": "completed"},
+  {"id": "ORD1007", "customer_id": "CUST004", "amount": 50.00,  "date": "2026-06-12", "status": "completed"},
+  {"id": "ORD1008", "customer_id": "CUST003", "amount": 950.00, "date": "2026-03-01", "status": "cancelled"}
+]
