@@ -50,5 +50,18 @@ def get_order(order_id: Optional[str]) -> Optional[Order]:
     return next((o for o in _orders() if o.id == order_id), None)
 
 
+def resolve_order(order_id: Optional[str], history: list[Order]) -> Optional[Order]:
+    """Helper: resolve an order the way a support agent would — look in the
+    customer's own order history first, then fall back to the global index.
+    The fallback is what lets the rules distinguish "order doesn't exist"
+    (no_matching_order) from "order belongs to a different customer"
+    (order_customer_mismatch). With a real datastore this collapses into one
+    indexed query; keeping it here preserves the pipeline/data seam.
+    """
+    if not order_id:
+        return None
+    return next((o for o in history if o.id == order_id), None) or get_order(order_id)
+
+
 def load_sample_requests() -> list[dict]:
     return json.loads((DATA_DIR / "sample_requests.json").read_text(encoding="utf-8"))

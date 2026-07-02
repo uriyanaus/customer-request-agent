@@ -31,11 +31,13 @@ def process_request(
         f"customer_id={parsed.customer_id}, order_id={parsed.order_id}, amount={parsed.amount}."
     ]
 
-    # 2. Look up reference data via the tools.
+    # 2. Look up reference data via the tools. The order is resolved through
+    #    the customer's own order history (see tools.resolve_order for why the
+    #    global fallback exists).
     customer = tools.lookup_customer(parsed.customer_id)
-    order = tools.get_order(parsed.order_id)
+    history = tools.get_order_history(parsed.customer_id)
+    order = tools.resolve_order(parsed.order_id, history)
     if parsed.customer_id:
-        history = tools.get_order_history(parsed.customer_id)
         trace.append(
             f"Tool lookup_customer({parsed.customer_id}) -> "
             f"{'found' if customer else 'not found'}; "
@@ -54,7 +56,10 @@ def process_request(
         request=parsed,
         customer_id=customer.id if customer else parsed.customer_id,
         order_id=order.id if order else parsed.order_id,
-        llm_mode=settings.resolved_llm_mode(),
+        # Report the classifier that actually parsed the request, not the
+        # configured mode — they differ when the LLM call fell back to mock,
+        # and the audit trail must be truthful exactly in that failure case.
+        llm_mode=parsed.parsed_by,
     )
 
     log_decision(decision)

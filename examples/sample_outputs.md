@@ -45,7 +45,7 @@ auto-approve or hard-escalate rule, so both route to human review.
   "request": {
     "raw_text": "Hi, this is Alice (CUST001). I'd like a refund for order ORD1001, it arrived damaged. It was $30.",
     "request_type": "REFUND", "customer_id": "CUST001", "order_id": "ORD1001",
-    "amount": 30.0, "missing_fields": [], "notes": "parsed by mock (regex) classifier"
+    "amount": 30.0, "missing_fields": [], "notes": "parsed by mock (regex) classifier", "parsed_by": "mock"
   },
   "customer_id": "CUST001", "order_id": "ORD1001", "llm_mode": "mock"
 }
@@ -68,7 +68,7 @@ auto-approve or hard-escalate rule, so both route to human review.
   "request": {
     "raw_text": "Refund please for ORD1004, this is CUST001. I was charged $75.",
     "request_type": "REFUND", "customer_id": "CUST001", "order_id": "ORD1004",
-    "amount": 75.0, "missing_fields": [], "notes": "parsed by mock (regex) classifier"
+    "amount": 75.0, "missing_fields": [], "notes": "parsed by mock (regex) classifier", "parsed_by": "mock"
   },
   "customer_id": "CUST001", "order_id": "ORD1004", "llm_mode": "mock"
 }
@@ -88,7 +88,7 @@ auto-approve or hard-escalate rule, so both route to human review.
   "request": {
     "raw_text": "Hello, I'm CUST999 and I want my money back for order ORD5555 ($20).",
     "request_type": "REFUND", "customer_id": "CUST999", "order_id": "ORD5555",
-    "amount": 20.0, "missing_fields": [], "notes": "parsed by mock (regex) classifier"
+    "amount": 20.0, "missing_fields": [], "notes": "parsed by mock (regex) classifier", "parsed_by": "mock"
   },
   "customer_id": "CUST999", "order_id": "ORD5555", "llm_mode": "mock"
 }
@@ -107,7 +107,7 @@ auto-approve or hard-escalate rule, so both route to human review.
   "request": {
     "raw_text": "I'm really unhappy and I want a refund.",
     "request_type": "REFUND", "customer_id": null, "order_id": null,
-    "amount": null, "missing_fields": [], "notes": "parsed by mock (regex) classifier"
+    "amount": null, "missing_fields": [], "notes": "parsed by mock (regex) classifier", "parsed_by": "mock"
   },
   "customer_id": null, "order_id": null, "llm_mode": "mock"
 }

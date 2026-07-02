@@ -82,9 +82,13 @@ into structured fields — and hand the verdict to a pure rule function. An LLM 
 applies the documented policy is not.
 
 ### The two tools
-`lookup_customer(customer_id)` and `get_order_history(customer_id)` (plus a small
-`get_order(order_id)` helper). They read bundled JSON today; swapping them for a
-real datastore wouldn't touch the rest of the pipeline.
+`lookup_customer(customer_id)` and `get_order_history(customer_id)` (plus small
+`get_order` / `resolve_order` helpers). The requested order is resolved **through
+the customer's own order history** (`tools.resolve_order`); the global `get_order`
+fallback is what lets the rules distinguish "order doesn't exist"
+(`no_matching_order`) from "order exists but belongs to someone else"
+(`order_customer_mismatch`). The tools read bundled JSON today; swapping them for
+a real datastore wouldn't touch the rest of the pipeline.
 
 ---
 
@@ -182,9 +186,10 @@ but the wrong reason."
 
 ## Observability
 Each decision also emits one **structured JSON audit event** to stderr (→ CloudWatch
-under Lambda) with email PII redacted. Since the service is stateless, these log
-events *are* the audit trail — persistence is a downstream concern, not coupled into
-the request path.
+under Lambda). The event is PII-free by construction — it carries only ids, never
+names or emails — and `redact_pii` additionally guards any free text that ever
+lands in logs. Since the service is stateless, these log events *are* the audit
+trail — persistence is a downstream concern, not coupled into the request path.
 
 ## LLM usage / mocking
 The classifier is one interface with two implementations. `AGENT_LLM=auto` (default)
@@ -192,6 +197,14 @@ uses **Claude (`claude-haiku-4-5`)** when `ANTHROPIC_API_KEY` is set (env var or
 `.env`), else the **mock** regex extractor. The LLM only extracts fields (the cheap/fast model is enough — it
 doesn't make the decision). Mock mode keeps the agent fully runnable, offline, and
 reproducible, which is also what makes the examples deterministic.
+
+On any LLM failure the classifier falls back to the mock and emits a
+`classifier_fallback` audit event; the decision's `llm_mode` always reports the
+classifier that **actually** parsed the request, so the audit trail stays
+truthful exactly in the failure case. Known mock limitations (acceptable for a
+documented regex stub; the LLM path handles them): it takes the *first*
+`$amount` in the text, misses bare "45 dollars", and breaks on comma-formatted
+amounts like `$1,200`.
 
 ---
 
@@ -210,6 +223,9 @@ make destroy         # tear down
 
 Defaults to `AGENT_LLM=mock` so a deploy works with no key; set
 `-var anthropic_api_key=... -var agent_llm=anthropic` to use Claude in the cloud.
+MVP shortcut, acknowledged: the key rides in as a plain Lambda env var and would
+land in `tfstate` — a real deployment would resolve it from SSM/Secrets Manager
+at runtime instead.
 
 ---
 

@@ -62,6 +62,7 @@ class MockClassifier:
             order_id=order.group(0).upper() if order else None,
             amount=float(amount_m.group(1)) if amount_m else None,
             notes="parsed by mock (regex) classifier",
+            parsed_by="mock",
         )
 
 
@@ -112,10 +113,11 @@ class AnthropicClassifier:
                 order_id=extracted.order_id or None,
                 amount=extracted.amount,
                 notes=f"parsed by Claude ({self._model})",
+                parsed_by="anthropic",
             )
         except Exception as exc:  # robustness: never let the LLM break the pipeline
             logger.info('{"event":"classifier_fallback","error":"%s"}' % type(exc).__name__)
-            return self._fallback.classify(text)
+            return self._fallback.classify(text)  # carries parsed_by="mock"
 
 
 def get_classifier(settings: Settings) -> Classifier:
