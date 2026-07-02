@@ -17,6 +17,7 @@ No API key required — it runs out of the box in deterministic **mock mode**:
 ```bash
 make install        # pip install -r requirements.txt  (just pydantic to run)
 make samples        # run all bundled sample requests through the agent
+make eval           # run the labelled evaluation suite (17 cases, all rules)
 ```
 
 Single request:
@@ -160,6 +161,23 @@ Every run returns an `AgentDecision` (Pydantic → JSON). It deliberately carrie
 See [`examples/sample_outputs.md`](examples/sample_outputs.md) for representative
 inputs and their full outputs (reproduce with `make samples`).
 
+## Evaluation
+A small labelled regression suite lives in [`evals/`](evals/): `cases.json` maps
+each request to its expected `action` **and** `matched_rule`, and `run_eval.py`
+runs them and diffs the result (exit non-zero on any mismatch).
+
+```bash
+make eval        # 17/17 passed.
+```
+
+The 17 cases cover **all 12 rule ids** plus the documented boundary semantics
+(`$50` strict-under, `$500` strict-over — the off-by-one cases the spec leaves
+ambiguous). Because the rule engine is a pure function and the suite pins
+deterministic mock mode, the expected outcomes are stable — this is the cheap,
+high-value check the assignment calls out as a nice-to-have. Asserting on
+`matched_rule` (not just `action`) means a case can't pass "for the right action
+but the wrong reason."
+
 ## Observability
 Each decision also emits one **structured JSON audit event** to stderr (→ CloudWatch
 under Lambda) with email PII redacted. Since the service is stateless, these log
@@ -204,8 +222,9 @@ Defaults to `AGENT_LLM=mock` so a deploy works with no key; set
 - **Bundled JSON over a datastore** — fine for an MVP; the tools are the seam.
 
 ## What I'd improve with more time
-- **Eval harness** — a labelled set of requests with expected `action`/`matched_rule`
-  and a checker script (the rule engine is pure, so this is cheap and high-value).
+- **Grow the eval suite** — the harness exists (`make eval`, all 12 rules covered);
+  next would be adversarial free-text phrasings and, once the LLM classifier is in
+  the loop, an extraction-accuracy eval separate from the rule-decision eval.
 - **Async pipeline** — `API Gateway → SQS → Lambda worker → DynamoDB` for durable
   ingestion, retries, and back-pressure; the decision becomes an event others consume.
 - **Persistence** — write decisions to DynamoDB (or fan out the audit events) for a

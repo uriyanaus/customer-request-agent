@@ -1,0 +1,21 @@
+[
+  {"id": "EV01", "expected_action": "APPROVE",  "expected_rule": "under_50_within_30d",       "text": "Hi, this is Alice (CUST001). I'd like a refund for order ORD1001, it arrived damaged. It was $30.", "note": "clean auto-approve: $30 < $50, order 15 days old"},
+  {"id": "EV02", "expected_action": "ESCALATE", "expected_rule": "amount_over_500",            "text": "I want a refund of $600 for order ORD1002, customer CUST002.", "note": "$600 > $500 hard-escalate threshold"},
+  {"id": "EV03", "expected_action": "ESCALATE", "expected_rule": "order_older_than_90d",       "text": "Customer CUST003 here, requesting a refund on ORD1003 ($120) placed back in February.", "note": "order 135 days old > 90"},
+  {"id": "EV04", "expected_action": "ESCALATE", "expected_rule": "gray_area_review",           "text": "Refund please for ORD1004, this is CUST001. I was charged $75.", "note": "gray band: $75 within 30 days, no rule fires"},
+  {"id": "EV05", "expected_action": "REJECT",   "expected_rule": "no_matching_customer",       "text": "Hello, I'm CUST999 and I want my money back for order ORD5555 ($20).", "note": "unknown customer id"},
+  {"id": "EV06", "expected_action": "ESCALATE", "expected_rule": "incomplete_request",         "text": "I'm really unhappy and I want a refund.", "note": "refund intent but no id/amount -> incomplete"},
+  {"id": "EV07", "expected_action": "ESCALATE", "expected_rule": "gray_area_review",           "text": "This is CUST002 (Bob). Please refund $45 for ORD1005 from April.", "note": "gray band: $45 < $50 but order 57 days old (outside 30d)"},
+  {"id": "EV08", "expected_action": "ESCALATE", "expected_rule": "non_refund_request",         "text": "Account question: can CUST005 change the email on file?", "note": "not a refund intent"},
+  {"id": "EV09", "expected_action": "ESCALATE", "expected_rule": "customer_not_active",        "text": "CUST004 wants a $50 refund on ORD1007.", "note": "customer CUST004 is suspended"},
+  {"id": "EV10", "expected_action": "ESCALATE", "expected_rule": "order_not_refundable",       "text": "Refund $950 for ORD1008, CUST003 - the order was cancelled.", "note": "order status cancelled"},
+
+  {"id": "EV11", "expected_action": "REJECT",   "expected_rule": "no_matching_order",          "text": "Refund $20 for order ORD9999, this is CUST001.", "note": "customer exists, order id not found"},
+  {"id": "EV12", "expected_action": "REJECT",   "expected_rule": "order_customer_mismatch",    "text": "Refund $20 for ORD1001, this is CUST002.", "note": "ORD1001 belongs to CUST001, not CUST002"},
+  {"id": "EV13", "expected_action": "ESCALATE", "expected_rule": "refund_exceeds_order_total", "text": "Refund $100 for ORD1001, this is CUST001.", "note": "requested $100 > order total $30"},
+
+  {"id": "EV14", "expected_action": "ESCALATE", "expected_rule": "gray_area_review",           "text": "I'd like a $50 refund for ORD1006, CUST005.", "note": "boundary: $50 is NOT < $50 (strict), order within 30d -> not auto-approved"},
+  {"id": "EV15", "expected_action": "APPROVE",  "expected_rule": "under_50_within_30d",        "text": "Refund of $49.99 for ORD1006, CUST005 please.", "note": "boundary: $49.99 < $50 and within 30d -> approve"},
+  {"id": "EV16", "expected_action": "ESCALATE", "expected_rule": "gray_area_review",           "text": "Refund $500 for ORD1002, CUST002.", "note": "boundary: $500 is NOT > $500 (strict) -> gray band, not amount_over_500"},
+  {"id": "EV17", "expected_action": "ESCALATE", "expected_rule": "amount_over_500",            "text": "Refund $500.01 for ORD1002, CUST002.", "note": "boundary: $500.01 > $500 -> hard escalate"}
+]

@@ -4,7 +4,7 @@
 
 PY ?= python
 
-.PHONY: install run samples package deploy destroy clean
+.PHONY: install run samples eval package deploy destroy clean
 
 install:
 	$(PY) -m pip install -r requirements.txt
@@ -16,6 +16,10 @@ run:
 # Run every bundled sample request through the agent.
 samples:
 	$(PY) -m agent.cli --samples
+
+# Run the labelled evaluation suite (deterministic mock mode; exits non-zero on failure).
+eval:
+	$(PY) -m evals.run_eval
 
 # --- AWS deploy (Terraform; sync API Gateway -> Lambda) ---
 # Build the Lambda zip (agent package + dependencies).
