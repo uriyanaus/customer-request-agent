@@ -1,2 +1,2 @@
 pydantic>=2.6
-anthropic>=0.40
+anthropic>=0.115  # structured outputs (messages.parse) needs a recent SDK

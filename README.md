@@ -15,7 +15,7 @@ LLM never decides a refund — which keeps every decision auditable and testable
 No API key required — it runs out of the box in deterministic **mock mode**:
 
 ```bash
-make install        # pip install -r requirements.txt  (just pydantic to run)
+make install        # pip install -r requirements.txt  (mock mode needs only pydantic)
 make samples        # run all bundled sample requests through the agent
 make eval           # run the labelled evaluation suite (17 cases, all rules)
 ```
@@ -28,11 +28,13 @@ make run REQUEST="Refund for ORD1001, this is CUST001. It was $30."
 python -m agent.cli "Refund for ORD1001, this is CUST001. It was $30."
 ```
 
-Use the **real LLM** for parsing (Anthropic Claude) by setting a key:
+Use the **real LLM** for parsing (Anthropic Claude) by providing a key — either
+in a local `.env` file (gitignored, loaded automatically) or as an env var:
 
 ```bash
-export ANTHROPIC_API_KEY=sk-ant-...     # AGENT_LLM=auto picks Claude when a key is present
-python -m agent.cli --samples
+cp .env.example .env                    # then paste your key into .env
+# or: export ANTHROPIC_API_KEY=sk-ant-...
+python -m agent.cli --samples           # AGENT_LLM=auto picks Claude when a key is present
 ```
 
 ---
@@ -186,8 +188,8 @@ the request path.
 
 ## LLM usage / mocking
 The classifier is one interface with two implementations. `AGENT_LLM=auto` (default)
-uses **Claude (`claude-haiku-4-5`)** when `ANTHROPIC_API_KEY` is set, else the **mock**
-regex extractor. The LLM only extracts fields (the cheap/fast model is enough — it
+uses **Claude (`claude-haiku-4-5`)** when `ANTHROPIC_API_KEY` is set (env var or local
+`.env`), else the **mock** regex extractor. The LLM only extracts fields (the cheap/fast model is enough — it
 doesn't make the decision). Mock mode keeps the agent fully runnable, offline, and
 reproducible, which is also what makes the examples deterministic.
 

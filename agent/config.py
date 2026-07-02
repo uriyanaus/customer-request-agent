@@ -14,6 +14,27 @@ from pathlib import Path
 
 DATA_DIR = Path(__file__).parent / "data"
 
+
+def _load_dotenv(path: Path = Path(__file__).parent.parent / ".env") -> None:
+    """Minimal .env support (KEY=VALUE lines) so local runs can keep the API key
+    out of shell history. Real environment variables always win. Stdlib-only on
+    purpose — python-dotenv would be the choice once config grows beyond this.
+    Must run before Settings is defined, as its defaults read the environment.
+    """
+    if not path.is_file():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        key, value = key.strip(), value.strip().strip("'\"")
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
+_load_dotenv()
+
 # The assignment pins "today" so all date-based rules are deterministic.
 TODAY = date(2026, 6, 16)
 
